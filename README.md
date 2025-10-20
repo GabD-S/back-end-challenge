@@ -226,6 +226,8 @@ bin/rails s
 # API em http://localhost:3000
 ```
 
+Observação: este repositório possui a app Rails dentro da pasta `fit_dreams_api/`. Use os comandos acima dentro dessa pasta.
+
 ---
 
 ## 12) Próximos passos

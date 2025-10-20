@@ -1,64 +1,170 @@
-# Switch Dreams Challenge
+# Switch Dreams Challenge - Fit Dreams API
 
-O desafio proposto visa avaliar suas habilidades com o framework Ruby on Rails, sendo isso parte do processo seletivo para vaga de desenvolvedor backend da Switch Dreams.
+Este repositório contém a solução para o desafio de backend da **Switch Dreams**, que consiste na criação de uma API RESTful para gerenciar as aulas da academia Fit Dreams.
 
-Esperamos que você tenha uma boa noção nos seguintes tópicos:
+A aplicação foi desenvolvida utilizando Ruby on Rails no modo API, com foco em boas práticas, código limpo e organização.
 
-- HTTP e estrutura básica da web
-- Linguagem de programação Ruby
-- Framework Ruby on Rails
-- Banco de Dados relacional
-- Modelo MVC
-- API
-- Documentação de API (Não necessário em caso de testes automatizados e bem escritos)
-- Testes automatizados (opcional/diferencial e de preferência utilizando o RSPEC)
-- Padronização de código (linter - opcional/diferencial)
+**URL da API (Deploy):** `[AINDA A SER INSERIDO - LINK DO HEROKU AQUI]`
 
-Além disso é sempre interessante estar atento aos padrões usuais de qualidade de código.
+---
 
-## Problema
+## 📋 Índice
 
-A academia Fit Dreams possui uma grande versatilidade de aulas em seu cronograma, sendo que as atividades variam a cada mês. A Fit Dreams acaba de te contratar para desenvolver um sistema que organizará a disponibilidade de cada aula. 
+* [Tecnologias Utilizadas](#-tecnologias-utilizadas)
+* [Funcionalidades](#-funcionalidades)
+* [Estrutura da API](#-estrutura-da-api)
+* [Como Executar o Projeto](#-como-executar-o-projeto)
+* [Plano de Ações e Desenvolvimento](#-plano-de-ações-e-desenvolvimento)
 
-A aula poderá conter os campos: nome, horário de início, duração, nome do professor e descrição.
+---
 
-Como as aulas são variadas, decidiu-se inserir um sistema de **categorias** para melhor organização. Cada categoria terá um nome e descrição.
+## ✨ Tecnologias Utilizadas
 
-O administrador e o professor têm autorização total de criação, edição e deleção de qualquer categoria e aula, porém ambos os resursos não podem ser alteradas por um aluno da academia.
+* **Ruby:** 3.x
+* **Ruby on Rails:** 7.x (API-only)
+* **Banco de Dados:** PostgreSQL
+* **Autenticação:** JWT (JSON Web Tokens)
+* **Autorização:** Pundit
+* **Testes (Diferencial):** RSpec
+* **Linter (Diferencial):** Rubocop
 
-O sistema deve permitir também que exista um sistema de usuários, sendo que os usuários são divididos entre alunos, professores e administradores. O usuário deve ter nome, data de nascimento, email, senha e a sua respectiva role (aluno, professor ou admin).
+---
 
-Um usuário também pode estar matriculado em diversas aulas e uma aula pode ter diversos alunos matriculados.
+## 🚀 Funcionalidades
 
-## Requisitos
+* [ ] **Gerenciamento de Usuários:** Cadastro e autenticação de usuários com três perfis (roles): `aluno`, `professor` e `admin`.
+* [ ] **Autenticação Segura:** Sistema de login via endpoint `/login` que retorna um token JWT.
+* [ ] **Controle de Acesso por Perfil:**
+    * **Admins e Professores:** Podem criar, editar e deletar Categorias e Aulas.
+    * **Alunos:** Podem visualizar Categorias e Aulas, e se matricular nelas.
+* [ ] **Gerenciamento de Categorias:** CRUD completo para organizar as aulas.
+* [ ] **Gerenciamento de Aulas:** CRUD completo, com cada aula associada a uma categoria.
+* [ ] **Sistema de Matrículas:** Alunos podem se matricular em múltiplas aulas, e uma aula pode ter múltiplos alunos.
 
-Para iniciar o desafio, crie um repositório pessoal e inicie seu projeto rails nele. Altera o readme com todas as informações que você julgar pertinente para o desafio. Para entregar a sua implementação, você deve criar um deploy no [heroku](https://www.heroku.com/) ou servidor de sua preferência (explicite no readme a url da deploy da API)
+---
 
-Para padronizar o desafio você deve usar o Postgres como banco de dados (exigido pelo heroku) e a versão do Rails pode ser a 6.x ou 7.x com preferência para a 7. Sugerimos também que utilize a versão 2.7.x ou 3.x do ruby, para que você possa usar as features mais novas da linguagem.
+## 🌐 Estrutura da API
 
-A aplicação deve ser em Rails API e deve-se utilizar postman, insomnia, swagger ou testes no rspec para documentá-la.
+A API será versionada para garantir manutenibilidade. A estrutura base dos endpoints será:
 
-Diferenciais:
-Para os testes automatizados recomenda-se a utilização do RSpec e para padronização de código (linter) é recomendável a utilização do rubocop.
+`http://localhost:3000/api/v1/...`
 
-## Entrega
+### Endpoints Principais:
 
-Deve ser enviado um email constando o repositório github em que o projeto foi desenvolvido assim como o link do deploy feito no heroku
+| Método | Rota                  | Descrição                                 | Acesso                    |
+| :----- | :-------------------- | :---------------------------------------- | :------------------------ |
+| `POST` | `/api/v1/signup`      | Registra um novo usuário (padrão: aluno). | Público                   |
+| `POST` | `/api/v1/login`       | Autentica um usuário e retorna um token.  | Público                   |
+| `GET`  | `/api/v1/categories`  | Lista todas as categorias.                | Autenticado               |
+| `POST` | `/api/v1/categories`  | Cria uma nova categoria.                  | Admin / Professor         |
+| `GET`  | `/api/v1/aulas`       | Lista todas as aulas.                     | Autenticado               |
+| `POST` | `/api/v1/aulas`       | Cria uma nova aula.                       | Admin / Professor         |
+| `POST` | `/api/v1/aulas/:id/enroll` | Matricula o usuário logado na aula.    | Aluno                     |
+| ...    | ...                   | Outros endpoints de `show`, `update`, `delete`. | Conforme a regra de perfil|
 
-## Avaliação
+*A documentação completa dos endpoints será feita utilizando **Postman/Insomnia** ou através dos testes de requisição do **RSpec**.*
 
-Avaliaremos as seguintes habilidades
+---
 
-- Nível de conhecimento em Rails
-- Nível de conhecimento em Ruby
-- Nível de conhecimento em API
-- Qualidade da documentação
-- Utilização do github
+## 💻 Como Executar o Projeto
 
-Diferenciais:
-- Qualidade dos testes
-- Utilização de um linter
-- Qualidade do código
+Siga os passos abaixo para configurar e rodar a aplicação em seu ambiente local.
 
-## Observações
-Ao enviar o desafio você declara que a solução implementada foi 100% feita por você, sem violar nenhuma licença de software de terceiros.
+### Pré-requisitos
+
+* Ruby (versão 3.x)
+* Bundler (`gem install bundler`)
+* PostgreSQL
+
+### Passos
+
+1.  **Clone o repositório:**
+    ```bash
+    git clone [https://github.com/seu-usuario/switch_dreams_api.git](https://github.com/seu-usuario/switch_dreams_api.git)
+    cd switch_dreams_api
+    ```
+
+2.  **Instale as dependências:**
+    ```bash
+    bundle install
+    ```
+
+3.  **Configure o banco de dados:**
+    * Certifique-se de que seu PostgreSQL está rodando.
+    * Se necessário, ajuste o arquivo `config/database.yml` com suas credenciais.
+    * Crie e prepare o banco de dados:
+    ```bash
+    rails db:create
+    rails db:migrate
+    ```
+
+4.  **Execute o servidor:**
+    ```bash
+    rails server
+    ```
+    A API estará disponível em `http://localhost:3000`.
+
+5.  **(Opcional) Execute os testes:**
+    ```bash
+    rspec
+    ```
+
+---
+
+## ✅ Plano de Ações e Desenvolvimento
+
+Este é o checklist que guiará o desenvolvimento do projeto, dividido em fases para melhor organização.
+
+### Fase 0: Configuração do Ambiente
+- [ ] Iniciar o projeto Rails 7 em modo API com PostgreSQL (`rails new ...`).
+- [ ] Configurar o repositório Git e fazer o primeiro push no GitHub.
+- [ ] Criar o banco de dados local com `rails db:create`.
+- [ ] (Diferencial) Adicionar e configurar as gems `rspec-rails` e `rubocop`.
+
+### Fase 1: Modelagem de Dados e Migrations
+- [ ] Gerar model `User` (`name`, `birth_date`, `email`, `password_digest`, `role`).
+- [ ] Gerar model `Category` (`name`, `description`).
+- [ ] Gerar model `Aula` (`name`, `start_time`, `duration`, `teacher_name`, `description`, `category:references`).
+- [ ] Gerar model de junção `Enrollment` (`user:references`, `aula:references`).
+- [ ] Executar `rails db:migrate`.
+
+### Fase 2: Configurar Models (Validações e Associações)
+- [ ] Em `User`, adicionar `has_secure_password`, `enum role`, e as associações `has_many :aulas, through: :enrollments`.
+- [ ] Em `Aula`, adicionar as associações `belongs_to :category` e `has_many :alunos, through: :enrollments`.
+- [ ] Em `Enrollment`, adicionar validação de unicidade para o par `user_id` e `aula_id`.
+- [ ] Adicionar validações de presença (`presence: true`) e formato nos campos necessários.
+
+### Fase 3: Autenticação (JWT)
+- [ ] Adicionar a gem `jwt`.
+- [ ] Criar uma classe de serviço em `lib/json_web_token.rb` para `encode` e `decode`.
+- [ ] Criar o `AuthenticationController` com a ação `create` para o endpoint de login.
+- [ ] Configurar um `before_action` no `ApplicationController` para verificar o token em todas as requisições protegidas.
+
+### Fase 4: Autorização (Pundit)
+- [ ] Adicionar e instalar a gem `Pundit`.
+- [ ] Incluir `Pundit::Authorization` no `ApplicationController` e tratar `Pundit::NotAuthorizedError`.
+- [ ] Gerar e implementar a `CategoryPolicy` (permitir `create?`, `update?`, `destroy?` para admin/professor).
+- [ ] Gerar e implementar a `AulaPolicy` (mesmas permissões da `CategoryPolicy`).
+
+### Fase 5: API Endpoints (Controllers e Rotas)
+- [ ] Estruturar as rotas dentro de um `namespace :api, :v1`.
+- [ ] Criar `UsersController` para a ação `create` (signup).
+- [ ] Criar `CategoriesController` com as ações CRUD, protegidas pelo Pundit.
+- [ ] Criar `AulasController` com as ações CRUD, protegidas pelo Pundit.
+- [ ] Adicionar uma rota e ação para permitir que alunos se matriculem (`POST /aulas/:id/enroll`).
+
+### Fase 6: Testes e Documentação
+- [ ] (Diferencial) Escrever testes de requisição (request specs) com RSpec para os principais endpoints, cobrindo:
+    - [ ] Casos de sucesso (status 200, 201).
+    - [ ] Erros de autenticação (status 401).
+    - [ ] Erros de autorização (status 403).
+    - [ ] Erros de validação (status 422).
+- [ ] Criar uma coleção no Postman ou Insomnia para documentar e testar a API manualmente.
+
+### Fase 7: Deploy
+- [ ] Criar uma nova aplicação no Heroku.
+- [ ] Garantir que a gem `pg` está no grupo principal do `Gemfile`.
+- [ ] Fazer o deploy da branch `main` para o Heroku (`git push heroku main`).
+- [ ] Executar as migrations no ambiente de produção (`heroku run rails db:migrate`).
+- [ ] Testar os endpoints da API em produção.
+- [ ] Atualizar este `README.md` com a URL final da API.
