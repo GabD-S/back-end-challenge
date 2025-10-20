@@ -116,10 +116,15 @@ Siga os passos abaixo para configurar e rodar a aplicação em seu ambiente loca
 Este é o checklist que guiará o desenvolvimento do projeto, dividido em fases para melhor organização.
 
 ### Fase 0: Configuração do Ambiente
-- [ ] Iniciar o projeto Rails 7 em modo API com PostgreSQL (`rails new ...`).
-- [ ] Configurar o repositório Git e fazer o primeiro push no GitHub.
-- [ ] Criar o banco de dados local com `rails db:create`.
-- [ ] (Diferencial) Adicionar e configurar as gems `rspec-rails` e `rubocop`.
+- [x] Iniciar o projeto Rails 7 em modo API com PostgreSQL (`rails new ...`).
+    - 20/10/2025: Gerado app Rails 7.2.2.2 (API-only) na pasta `fit_dreams_api/` com `--database=postgresql`. Bundler configurado para `vendor/bundle` e removido `.git` interno criado pelo `rails new` para evitar repositório aninhado.
+- [x] Configurar o repositório Git e fazer o primeiro push no GitHub.
+    - 20/10/2025: Repositório configurado com remoto via SSH. Criadas branches de trabalho e realizado o push da Fase 0 na branch `feat/rails-setup`.
+- [x] Criar o banco de dados local com `rails db:create`.
+    - 20/10/2025: Ajustado usuário do PostgreSQL e criado os bancos `fit_dreams_api_development` e `fit_dreams_api_test` com `bin/rails db:create`.
+- [x] (Diferencial) Adicionar e configurar as gems `rspec-rails` e `rubocop`.
+    - 20/10/2025: Adicionado `rspec-rails (~> 6.1)` e executado `rails generate rspec:install` (criados `.rspec`, `spec/spec_helper.rb` e `spec/rails_helper.rb`). Adicionado `rubocop-rails-omakase` e executado RuboCop com correção de trailing blank lines no `Gemfile` (commit "chore(lint)").
+    - Extra: Executado Brakeman (baseline de segurança) sem alertas.
 
 ### Fase 1: Modelagem de Dados e Migrations
 - [ ] Gerar model `User` (`name`, `birth_date`, `email`, `password_digest`, `role`).
