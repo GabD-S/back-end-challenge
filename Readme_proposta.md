@@ -150,13 +150,20 @@ Este é o checklist que guiará o desenvolvimento do projeto, dividido em fases 
 
 > Observação: Usei exemplos simples e apenas coloquei nomes aleatórios; ainda falta colocar links para usuário preencher nomes e criar e-mails por si só.
 
+Observações desta etapa:
+- Adicionados `FactoryBot` e `Faker` para geração de dados realistas em testes e seeds.
+- Implementada normalização de e-mail (downcase + strip) e validação de formato; unicidade case-insensitive aplicada em validação e no banco (índice único em `LOWER(email)`).
+- Criados seeds com usuários, categorias e aulas; executado `rails db:seed` e verificado conteúdo do banco (nomes/e-mails/roles e aulas com categorias).
+- Refatorados testes de models para usar factories; todos os specs de models passando.
+- Próximos: request specs de signup/login, documentação interativa (Swagger/rswag) e/ou front-end para entradas via formulário.
+
 Objetivos complementares desta fase para atingir esse objetivo:
-- [ ] Introduzir `FactoryBot` e `Faker` para gerar dados realistas em testes (substituir nomes/e-mails fixos).
-- [ ] Adicionar validação de formato de e-mail (`URI::MailTo::EMAIL_REGEXP`) e normalização (`before_validation` para `email.downcase`).
-- [ ] Tornar a unicidade de e-mail case-insensitive (validação e, opcionalmente, índice único em `LOWER(email)` via migration).
-- [ ] Criar seeds (`db/seeds.rb`) com dados exemplo usando Faker para facilitar testes manuais.
+- [x] Introduzir `FactoryBot` e `Faker` para gerar dados realistas em testes (substituir nomes/e-mails fixos).
+- [x] Adicionar validação de formato de e-mail (`URI::MailTo::EMAIL_REGEXP`) e normalização (`before_validation` para `email.downcase`).
+- [x] Tornar a unicidade de e-mail case-insensitive (validação e índice único em `LOWER(email)` via migration).
+- [x] Criar seeds (`db/seeds.rb`) com dados exemplo usando Faker para facilitar testes manuais.
 - [ ] Adicionar request specs para fluxo de cadastro (signup) onde o usuário fornece `name/email/password` (prepara terreno para a Fase 3 - JWT).
-- [ ] Atualizar documentação em `testes/` com exemplos de uso e como rodar os novos testes.
+- [ ] Atualizar documentação em `testes/` com exemplos de uso e como rodar os novos testes (incluindo uso de FactoryBot/Faker nos specs).
 
 ### Fase 3: Autenticação (JWT)
 - [ ] Adicionar a gem `jwt`.
