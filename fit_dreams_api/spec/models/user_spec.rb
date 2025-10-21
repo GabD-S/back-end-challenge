@@ -34,6 +34,25 @@ RSpec.describe User, type: :model do
       expect(dup.valid?).to be_falsey
       expect(dup.errors[:email]).to be_present
     end
+
+    it 'normalizes email to lowercase and trims whitespace' do
+      user = build(:user, email: '  MIXED.Case+test@Example.COM  ')
+      expect(user.valid?).to be_truthy
+      expect(user.email).to eq('mixed.case+test@example.com')
+    end
+
+    it 'rejects invalid email format' do
+      user = build(:user, email: 'invalid-email')
+      expect(user.valid?).to be_falsey
+      expect(user.errors[:email]).to be_present
+    end
+
+    it 'enforces case-insensitive uniqueness of email' do
+      create(:user, email: 'case@test.com')
+      dup = build(:user, email: 'CASE@test.COM')
+      expect(dup.valid?).to be_falsey
+      expect(dup.errors[:email]).to be_present
+    end
   end
 
   describe 'secure password' do
