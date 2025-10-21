@@ -127,11 +127,16 @@ Este é o checklist que guiará o desenvolvimento do projeto, dividido em fases 
     - Extra: Executado Brakeman (baseline de segurança) sem alertas.
 
 ### Fase 1: Modelagem de Dados e Migrations
-- [ ] Gerar model `User` (`name`, `birth_date`, `email`, `password_digest`, `role`).
-- [ ] Gerar model `Category` (`name`, `description`).
-- [ ] Gerar model `Aula` (`name`, `start_time`, `duration`, `teacher_name`, `description`, `category:references`).
-- [ ] Gerar model de junção `Enrollment` (`user:references`, `aula:references`).
-- [ ] Executar `rails db:migrate`.
+- [x] Gerar model `User` (`name`, `birth_date`, `email`, `password_digest`, `role`).
+    - 21/10/2025: Gerado `User` com migração reforçada: `name/email/password_digest` com `null: false`, `role` com `default: 0` (aluno) e índice único em `email`.
+- [x] Gerar model `Category` (`name`, `description`).
+    - 21/10/2025: Gerado `Category` com `name` obrigatório e índice em `name`.
+- [x] Gerar model `Aula` (`name`, `start_time`, `duration`, `teacher_name`, `description`, `category:references`).
+    - 21/10/2025: Gerado `Aula` com campos obrigatórios, `category` como FK e índice em `start_time`.
+- [x] Gerar model de junção `Enrollment` (`user:references`, `aula:references`).
+    - 21/10/2025: Gerado `Enrollment` com FKs e índice único composto em `[user_id, aula_id]`.
+- [x] Executar `rails db:migrate`.
+    - 21/10/2025: Migrations aplicadas com sucesso; `db/schema.rb` atualizado.
 
 ### Fase 2: Configurar Models (Validações e Associações)
 - [ ] Em `User`, adicionar `has_secure_password`, `enum role`, e as associações `has_many :aulas, through: :enrollments`.
