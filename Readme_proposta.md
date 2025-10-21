@@ -139,10 +139,24 @@ Este é o checklist que guiará o desenvolvimento do projeto, dividido em fases 
     - 21/10/2025: Migrations aplicadas com sucesso; `db/schema.rb` atualizado.
 
 ### Fase 2: Configurar Models (Validações e Associações)
-- [ ] Em `User`, adicionar `has_secure_password`, `enum role`, e as associações `has_many :aulas, through: :enrollments`.
-- [ ] Em `Aula`, adicionar as associações `belongs_to :category` e `has_many :alunos, through: :enrollments`.
-- [ ] Em `Enrollment`, adicionar validação de unicidade para o par `user_id` e `aula_id`.
-- [ ] Adicionar validações de presença (`presence: true`) e formato nos campos necessários.
+- [x] Em `User`, adicionar `has_secure_password`, `enum role`, e as associações `has_many :aulas, through: :enrollments`.
+    - 21/10/2025: Implementado `has_secure_password`, `enum :role` (aluno/professor/admin), `has_many :enrollments` (com `dependent: :destroy`) e `has_many :aulas, through: :enrollments`. Validações de presença (name, email) e unicidade (email).
+- [x] Em `Aula`, adicionar as associações `belongs_to :category` e `has_many :alunos, through: :enrollments`.
+    - 21/10/2025: Implementado `belongs_to :category`, `has_many :enrollments` (com `dependent: :destroy`) e `has_many :alunos, through: :enrollments, source: :user`. Validações de presença (name, start_time, duration, teacher_name, category) e `duration` inteiro > 0.
+- [x] Em `Enrollment`, adicionar validação de unicidade para o par `user_id` e `aula_id`.
+    - 21/10/2025: Adicionada validação de unicidade de `user_id` com escopo em `aula_id` (além do índice único na migration).
+- [x] Adicionar validações de presença (`presence: true`) e formato nos campos necessários.
+    - 21/10/2025: Presença aplicada conforme descrito acima. Validação de formato de e-mail será tratada em melhorias complementares.
+
+> Observação: Usei exemplos simples e apenas coloquei nomes aleatórios; ainda falta colocar links para usuário preencher nomes e criar e-mails por si só.
+
+Objetivos complementares desta fase para atingir esse objetivo:
+- [ ] Introduzir `FactoryBot` e `Faker` para gerar dados realistas em testes (substituir nomes/e-mails fixos).
+- [ ] Adicionar validação de formato de e-mail (`URI::MailTo::EMAIL_REGEXP`) e normalização (`before_validation` para `email.downcase`).
+- [ ] Tornar a unicidade de e-mail case-insensitive (validação e, opcionalmente, índice único em `LOWER(email)` via migration).
+- [ ] Criar seeds (`db/seeds.rb`) com dados exemplo usando Faker para facilitar testes manuais.
+- [ ] Adicionar request specs para fluxo de cadastro (signup) onde o usuário fornece `name/email/password` (prepara terreno para a Fase 3 - JWT).
+- [ ] Atualizar documentação em `testes/` com exemplos de uso e como rodar os novos testes.
 
 ### Fase 3: Autenticação (JWT)
 - [ ] Adicionar a gem `jwt`.
