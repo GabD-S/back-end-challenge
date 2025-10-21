@@ -166,10 +166,29 @@ Objetivos complementares desta fase para atingir esse objetivo:
 - [ ] Atualizar documentação em `testes/` com exemplos de uso e como rodar os novos testes (incluindo uso de FactoryBot/Faker nos specs).
 
 ### Fase 3: Autenticação (JWT)
-- [ ] Adicionar a gem `jwt`.
-- [ ] Criar uma classe de serviço em `lib/json_web_token.rb` para `encode` e `decode`.
-- [ ] Criar o `AuthenticationController` com a ação `create` para o endpoint de login.
-- [ ] Configurar um `before_action` no `ApplicationController` para verificar o token em todas as requisições protegidas.
+- [x] Adicionar a gem `jwt`.
+- [x] Criar uma classe de serviço em `lib/json_web_token.rb` para `encode` e `decode`.
+- [x] Criar o `AuthenticationController` com a ação `create` para o endpoint de login.
+- [x] Configurar um `before_action` no `ApplicationController` para verificar o token em todas as requisições protegidas.
+
+Observações desta etapa:
+- Implementado fluxo de login via `POST /api/v1/login` retornando `{ token, exp, user }`.
+- Serviço `JsonWebToken` (HS256) usando `secret_key_base`, com expiração padrão em 24h.
+- `ApplicationController` passou a expor `authenticate_request!` e `current_user` para proteger futuras rotas.
+- Criados request specs em `spec/requests/authentication_spec.rb` e documentação em `testes/auth_tests.md`.
+- Lint aplicado (RuboCop sem offenses) após ajustes de estilo (tabs → spaces, aspas, espaçamento em arrays).
+
+Como testar rapidamente o login:
+```bash
+cd fit_dreams_api
+bundle exec rails db:prepare
+bundle exec rails s
+# Em outro terminal:
+curl -i -X POST http://localhost:3000/api/v1/login \
+    -H 'Content-Type: application/json' \
+    -d '{"email":"<seu_email>","password":"<sua_senha>"}'
+```
+Use o token retornado no header `Authorization: Bearer <token>` nas rotas protegidas.
 
 ### Fase 4: Autorização (Pundit)
 - [ ] Adicionar e instalar a gem `Pundit`.
