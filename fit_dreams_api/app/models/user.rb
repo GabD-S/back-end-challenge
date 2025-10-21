@@ -1,21 +1,21 @@
 class User < ApplicationRecord
-	has_secure_password
+  has_secure_password
 
-		enum :role, { aluno: 0, professor: 1, admin: 2 }
+  enum :role, { aluno: 0, professor: 1, admin: 2 }
 
-	has_many :enrollments, dependent: :destroy
-	has_many :aulas, through: :enrollments
+  has_many :enrollments, dependent: :destroy
+  has_many :aulas, through: :enrollments
 
-	before_validation :normalize_email
+  before_validation :normalize_email
 
-	validates :name, presence: true
-	validates :email, presence: true,
-										format: { with: URI::MailTo::EMAIL_REGEXP },
-										uniqueness: { case_sensitive: false }
+  validates :name, presence: true
+  validates :email, presence: true,
+                    format: { with: URI::MailTo::EMAIL_REGEXP },
+                    uniqueness: { case_sensitive: false }
 
-	private
+  private
 
-	def normalize_email
-		self.email = email.to_s.strip.downcase if email.present?
-	end
+  def normalize_email
+    self.email = email.to_s.strip.downcase if email.present?
+  end
 end

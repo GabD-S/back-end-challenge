@@ -1,5 +1,5 @@
 class JsonWebToken
-  ALGORITHM = 'HS256'.freeze
+  ALGORITHM = "HS256".freeze
 
   # Encodes a payload with expiration into a JWT string
   # payload: Hash (keys will be stringified by JWT)
