@@ -38,4 +38,8 @@ group :development, :test do
 
   # Testes (RSpec)
   gem "rspec-rails", "~> 6.1"
+
+  # Test factories and fake realistic data
+  gem "factory_bot_rails"
+  gem "faker"
 end
