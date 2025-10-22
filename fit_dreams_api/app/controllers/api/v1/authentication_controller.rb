@@ -17,7 +17,7 @@ module Api
             user: { id: user.id, name: user.name, email: user.email, role: user.role }
           })
         else
-          render_errors(["Invalid email or password"], status: :unauthorized)
+          render_errors([ "Invalid email or password" ], status: :unauthorized)
         end
       end
     end
