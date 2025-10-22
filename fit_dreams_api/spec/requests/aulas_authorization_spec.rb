@@ -19,18 +19,18 @@ RSpec.describe 'Aulas authorization and enroll', type: :request do
 
     it 'returns 200 when authenticated' do
       get '/api/v1/aulas', headers: auth_headers_for(aluno)
-      expect(response).to have_http_status(:ok)
-      body = JSON.parse(response.body)
-      expect(body).to be_an(Array)
+  expect(response).to have_http_status(:ok)
+  body = JSON.parse(response.body)
+  expect(body['data']).to be_an(Array)
     end
   end
 
   describe 'GET /api/v1/aulas/:id' do
     it 'returns 200 when authenticated' do
       get "/api/v1/aulas/#{aula.id}", headers: auth_headers_for(aluno)
-      expect(response).to have_http_status(:ok)
-      body = JSON.parse(response.body)
-      expect(body).to include('id' => aula.id, 'name' => aula.name)
+  expect(response).to have_http_status(:ok)
+  body = JSON.parse(response.body)
+  expect(body['data']).to include('id' => aula.id, 'name' => aula.name)
     end
   end
 
@@ -54,9 +54,9 @@ RSpec.describe 'Aulas authorization and enroll', type: :request do
 
     it 'creates for professor (201)' do
       post '/api/v1/aulas', params: valid_params.to_json, headers: auth_headers_for(professor)
-      expect(response).to have_http_status(:created)
-      body = JSON.parse(response.body)
-      expect(body['name']).to eq('Pilates')
+  expect(response).to have_http_status(:created)
+  body = JSON.parse(response.body)
+  expect(body['data']['name']).to eq('Pilates')
     end
   end
 

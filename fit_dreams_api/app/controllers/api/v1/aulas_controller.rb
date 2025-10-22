@@ -6,21 +6,21 @@ module Api
 
       def index
         aulas = policy_scope(Aula)
-        render json: aulas
+        render_success(aulas)
       end
 
       def show
         authorize @aula
-        render json: @aula
+        render_success(@aula)
       end
 
       def create
         aula = Aula.new(aula_params)
         authorize aula
         if aula.save
-          render json: aula, status: :created
+          render_success(aula, status: :created)
         else
-          render json: { errors: aula.errors.full_messages }, status: :unprocessable_entity
+          render_errors(aula.errors.full_messages, status: :unprocessable_entity)
         end
       end
 
@@ -28,9 +28,9 @@ module Api
         authorize @aula, :enroll?
         enrollment = Enrollment.new(user: current_user, aula: @aula)
         if enrollment.save
-          render json: { message: "Enrolled successfully", id: enrollment.id }, status: :created
+          render_success({ message: "Enrolled successfully", id: enrollment.id }, status: :created)
         else
-          render json: { errors: enrollment.errors.full_messages }, status: :unprocessable_entity
+          render_errors(enrollment.errors.full_messages, status: :unprocessable_entity)
         end
       end
 

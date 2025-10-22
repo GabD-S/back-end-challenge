@@ -21,12 +21,12 @@ RSpec.describe 'Categories index', type: :request do
 
     it 'returns 200 and the list of categories' do
       get '/api/v1/categories', headers: auth_headers_for(user)
-      expect(response).to have_http_status(:ok)
-      body = JSON.parse(response.body)
-      expect(body).to be_an(Array)
-      expect(body.size).to eq(Category.count)
-      # Ensure the payload contains expected fields
-      expect(body.first).to include('id', 'name')
+  expect(response).to have_http_status(:ok)
+  body = JSON.parse(response.body)
+  expect(body['data']).to be_an(Array)
+  expect(body['data'].size).to eq(Category.count)
+  # Ensure the payload contains expected fields
+  expect(body['data'].first).to include('id', 'name')
     end
   end
 end

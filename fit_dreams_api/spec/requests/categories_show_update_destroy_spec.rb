@@ -18,9 +18,9 @@ RSpec.describe 'Categories show/update/destroy', type: :request do
 
     it 'returns 200 when authenticated' do
       get "/api/v1/categories/#{category.id}", headers: auth_headers_for(aluno)
-      expect(response).to have_http_status(:ok)
-      body = JSON.parse(response.body)
-      expect(body).to include('id' => category.id, 'name' => category.name)
+  expect(response).to have_http_status(:ok)
+  body = JSON.parse(response.body)
+  expect(body['data']).to include('id' => category.id, 'name' => category.name)
     end
   end
 
@@ -32,9 +32,9 @@ RSpec.describe 'Categories show/update/destroy', type: :request do
 
     it 'updates for professor (200)' do
       patch "/api/v1/categories/#{category.id}", params: { category: { name: 'Novo' } }.to_json, headers: auth_headers_for(professor)
-      expect(response).to have_http_status(:ok)
-      body = JSON.parse(response.body)
-      expect(body['name']).to eq('Novo')
+  expect(response).to have_http_status(:ok)
+  body = JSON.parse(response.body)
+  expect(body['data']['name']).to eq('Novo')
     end
   end
 

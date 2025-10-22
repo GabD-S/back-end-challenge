@@ -6,30 +6,30 @@ module Api
 
       def index
         categories = policy_scope(Category)
-        render json: categories
+        render_success(categories)
       end
 
       def show
         authorize @category
-        render json: @category
+        render_success(@category)
       end
 
       def create
         category = Category.new(category_params)
         authorize category
         if category.save
-          render json: category, status: :created
+          render_success(category, status: :created)
         else
-          render json: { errors: category.errors.full_messages }, status: :unprocessable_entity
+          render_errors(category.errors.full_messages, status: :unprocessable_entity)
         end
       end
 
       def update
         authorize @category
         if @category.update(category_params)
-          render json: @category
+          render_success(@category)
         else
-          render json: { errors: @category.errors.full_messages }, status: :unprocessable_entity
+          render_errors(@category.errors.full_messages, status: :unprocessable_entity)
         end
       end
 

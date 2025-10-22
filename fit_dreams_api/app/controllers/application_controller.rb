@@ -30,14 +30,25 @@ class ApplicationController < ActionController::API
   end
 
   def render_unauthorized
-    render json: { error: "Unauthorized" }, status: :unauthorized
+    render json: { errors: ["Unauthorized"] }, status: :unauthorized
   end
 
   def render_forbidden
-    render json: { error: "Forbidden" }, status: :forbidden
+    render json: { errors: ["Forbidden"] }, status: :forbidden
   end
 
   def render_not_found
-    render json: { error: "Not Found" }, status: :not_found
+    render json: { errors: ["Not Found"] }, status: :not_found
+  end
+
+  # Standard success wrapper
+  def render_success(data, status: :ok)
+    render json: { data: data }, status: status
+  end
+
+  # Standard error wrapper
+  def render_errors(errors, status: :unprocessable_entity)
+    payload = errors.is_a?(Array) ? errors : [errors]
+    render json: { errors: payload }, status: status
   end
 end

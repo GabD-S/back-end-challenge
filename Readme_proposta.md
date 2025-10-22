@@ -201,15 +201,10 @@ Observações desta etapa (o que já foi feito):
     - `CategoriesController`: `index` (policy_scope), `show`, `create` (staff), `update` (staff), `destroy` (staff).
     - `AulasController`: `index` (policy_scope), `show`, `create` (staff), `enroll` (apenas aluno) criando `Enrollment`.
 - Autenticação obrigatória via `authenticate_request!` em todos os endpoints protegidos.
-- Respostas em JSON com status adequados (200/201/204/401/403/422).
-
-O que ainda falta nesta fase (pendências e sugestões):
-- Adicionar request specs cobrindo autorização para os novos endpoints:
-    - Categories: `show` (200 autenticado), `update`/`destroy` (403 para aluno, 200/204 para staff).
-    - Aulas: `index`/`show` (200 autenticado), `create` (403 aluno, 201 staff), `enroll` (201 aluno; 403 staff; 422 em matrícula duplicada).
-- Padronizar o formato das respostas (sugestão): introduzir serializers ou responder com chaves consistentes (ex.: `data`, `errors`).
-- Endpoint utilitário sugerido: `GET /api/v1/me` para retornar o usuário autenticado a partir do token (facilita clientes validarem sessão).
-- Documentação manual (Postman/Insomnia) dos novos endpoints com exemplos de headers `Authorization: Bearer <token>` e corpos de requisição.
+- Respostas em JSON com status adequados (200/201/204/401/403/422) e formato padronizado: sucesso `{ data: ... }`, erro `{ errors: [...] }`.
+- Request specs cobrindo autorização e fluxo feliz/erro para `categories` e `aulas` (todos verdes).
+- Endpoint utilitário `GET /api/v1/me` implementado para retornar o usuário autenticado.
+- Coleção Postman adicionada em `postman/fit_dreams_api.postman_collection.json` com exemplos prontos de login, me, categories e aulas (inclui variável `token` populada automaticamente ao logar).
 
 ### Fase 5: API Endpoints (Controllers e Rotas)
 - [ ] Estruturar as rotas dentro de um `namespace :api, :v1`.
