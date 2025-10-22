@@ -1,8 +1,11 @@
 class ApplicationController < ActionController::API
   attr_reader :current_user
 
+  include Pundit::Authorization
+
   rescue_from ActiveRecord::RecordNotFound, with: :render_not_found
   rescue_from JWT::DecodeError, JWT::ExpiredSignature, with: :render_unauthorized
+  rescue_from Pundit::NotAuthorizedError, with: :render_forbidden
 
   private
 
