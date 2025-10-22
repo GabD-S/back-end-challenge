@@ -11,7 +11,12 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       post "login", to: "authentication#create"
-      resources :categories, only: [ :index, :create ]
+      resources :categories, only: [ :index, :show, :create, :update, :destroy ]
+      resources :aulas, only: [ :index, :show, :create ] do
+        member do
+          post :enroll
+        end
+      end
     end
   end
 end
