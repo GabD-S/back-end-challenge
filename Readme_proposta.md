@@ -191,25 +191,35 @@ curl -i -X POST http://localhost:3000/api/v1/login \
 Use o token retornado no header `Authorization: Bearer <token>` nas rotas protegidas.
 
 ### Fase 4: Autorização (Pundit)
-- [ ] Adicionar e instalar a gem `Pundit`.
-- [ ] Incluir `Pundit::Authorization` no `ApplicationController` e tratar `Pundit::NotAuthorizedError`.
-- [ ] Gerar e implementar a `CategoryPolicy` (permitir `create?`, `update?`, `destroy?` para admin/professor).
-- [ ] Gerar e implementar a `AulaPolicy` (mesmas permissões da `CategoryPolicy`).
+- [x] Adicionar e instalar a gem `Pundit`.
+- [x] Incluir `Pundit::Authorization` no `ApplicationController` e tratar `Pundit::NotAuthorizedError`.
+- [x] Gerar e implementar a `CategoryPolicy` (permitir `create?`, `update?`, `destroy?` para admin/professor; `index?`/`show?` para autenticados).
+- [x] Gerar e implementar a `AulaPolicy` (`create?` para admin/professor; `index?`/`show?` para autenticados; `enroll?` apenas para aluno).
+
+Observações desta etapa (o que já foi feito):
+- Rotas e controllers protegidos com Pundit:
+    - `CategoriesController`: `index` (policy_scope), `show`, `create` (staff), `update` (staff), `destroy` (staff).
+    - `AulasController`: `index` (policy_scope), `show`, `create` (staff), `enroll` (apenas aluno) criando `Enrollment`.
+- Autenticação obrigatória via `authenticate_request!` em todos os endpoints protegidos.
+- Respostas em JSON com status adequados (200/201/204/401/403/422) e formato padronizado: sucesso `{ data: ... }`, erro `{ errors: [...] }`.
+- Request specs cobrindo autorização e fluxo feliz/erro para `categories` e `aulas` (todos verdes).
+- Endpoint utilitário `GET /api/v1/me` implementado para retornar o usuário autenticado.
+- Coleção Postman adicionada em `postman/fit_dreams_api.postman_collection.json` com exemplos prontos de login, me, categories e aulas (inclui variável `token` populada automaticamente ao logar).
 
 ### Fase 5: API Endpoints (Controllers e Rotas)
-- [ ] Estruturar as rotas dentro de um `namespace :api, :v1`.
-- [ ] Criar `UsersController` para a ação `create` (signup).
-- [ ] Criar `CategoriesController` com as ações CRUD, protegidas pelo Pundit.
-- [ ] Criar `AulasController` com as ações CRUD, protegidas pelo Pundit.
-- [ ] Adicionar uma rota e ação para permitir que alunos se matriculem (`POST /aulas/:id/enroll`).
+ - [x] Estruturar as rotas dentro de um `namespace :api, :v1`.
+ - [x] Criar `UsersController` para a ação `create` (signup) com retorno `{ data: { token, exp, user } }` e status 201.
+ - [x] Adicionar rota `POST /api/v1/signup`.
+ - [x] Completar `AulasController` com `update` e `destroy` (staff via Pundit) e respostas padronizadas.
+ - [x] Atualizar rotas de `aulas` para incluir `update` e `destroy`.
 
 ### Fase 6: Testes e Documentação
-- [ ] (Diferencial) Escrever testes de requisição (request specs) com RSpec para os principais endpoints, cobrindo:
-    - [ ] Casos de sucesso (status 200, 201).
-    - [ ] Erros de autenticação (status 401).
-    - [ ] Erros de autorização (status 403).
-    - [ ] Erros de validação (status 422).
-- [ ] Criar uma coleção no Postman ou Insomnia para documentar e testar a API manualmente.
+ - [ ] (Diferencial) Escrever testes de requisição (request specs) com RSpec para os principais endpoints, cobrindo:
+     - [x] Casos de sucesso (status 200, 201) para login, me, signup, aulas update e destroy.
+     - [x] Erros de autenticação (status 401) para rotas protegidas.
+     - [x] Erros de autorização (status 403) para aluno em ações restritas (ex.: aulas update/destroy).
+     - [x] Erros de validação (status 422) em signup e atualização de recursos.
+ - [x] Criar uma coleção no Postman para documentar e testar a API manualmente (arquivo `postman/fit_dreams_api.postman_collection.json`).
 
 ### Fase 7: Deploy
 - [ ] Criar uma nova aplicação no Heroku.

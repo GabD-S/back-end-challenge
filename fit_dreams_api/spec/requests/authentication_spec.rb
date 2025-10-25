@@ -8,27 +8,28 @@ RSpec.describe 'Authentication', type: :request do
     it 'returns a JWT token on valid credentials' do
       post '/api/v1/login', params: { email: user.email, password: password }
 
-      expect(response).to have_http_status(:ok)
-      body = JSON.parse(response.body)
-      expect(body['token']).to be_present
-      expect(body['exp']).to be_a(Integer)
-      expect(body['user']).to include('id' => user.id, 'email' => user.email)
+  expect(response).to have_http_status(:ok)
+  body = JSON.parse(response.body)
+  expect(body['data']['token']).to be_present
+  expect(body['data']['exp']).to be_a(Integer)
+  expect(body['data']['user']).to include('id' => user.id, 'email' => user.email)
     end
 
     it 'is case-insensitive on email' do
       post '/api/v1/login', params: { email: user.email.upcase, password: password }
 
-      expect(response).to have_http_status(:ok)
-      body = JSON.parse(response.body)
-      expect(body['token']).to be_present
+  expect(response).to have_http_status(:ok)
+  body = JSON.parse(response.body)
+  expect(body['data']['token']).to be_present
     end
 
     it 'returns 401 on invalid password' do
       post '/api/v1/login', params: { email: user.email, password: 'wrong' }
 
-      expect(response).to have_http_status(:unauthorized)
-      body = JSON.parse(response.body)
-      expect(body['error']).to be_present
+  expect(response).to have_http_status(:unauthorized)
+  body = JSON.parse(response.body)
+  expect(body['errors']).to be_an(Array)
+  expect(body['errors']).not_to be_empty
     end
 
     it 'returns 401 on unknown email' do

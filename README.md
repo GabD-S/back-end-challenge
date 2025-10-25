@@ -230,9 +230,57 @@ Observação: este repositório possui a app Rails dentro da pasta `fit_dreams_a
 
 ---
 
+## API status (Fase 4 concluída)
+
+Implementado até aqui:
+
+- Modelos e migrações: `User`, `Category`, `Aula` e `Enrollment` com constraints e índices (inclui índice único em LOWER(email)).
+- Autenticação: JWT (HS256) com expiração 24h. Endpoint `POST /api/v1/login`.
+- Autorização: Pundit com políticas para `Category` e `Aula`.
+- Endpoints principais sob `/api/v1` protegidos por Bearer token.
+- Formato de resposta padronizado: sucesso em `{ data: ... }` e erros em `{ errors: [ ... ] }`.
+- Endpoint utilitário `GET /api/v1/me` para retornar o usuário autenticado.
+
+### Formato de resposta
+
+- Sucesso: `{ "data": <objeto|array> }`
+- Erro: `{ "errors": ["Mensagem 1", "Mensagem 2"] }`
+
+### Endpoints
+
+- `POST /api/v1/login` → body: `{ email, password }` → `{ data: { token, exp, user } }`
+- `GET /api/v1/me` → requer Bearer → `{ data: { id, name, email, role } }`
+- `GET /api/v1/categories` → lista categorias `{ data: [ ... ] }`
+- `GET /api/v1/categories/:id` → mostra categoria `{ data: { ... } }`
+- `POST /api/v1/categories` (staff) → cria `{ data: { ... } }`
+- `PATCH /api/v1/categories/:id` (staff) → atualiza `{ data: { ... } }`
+- `DELETE /api/v1/categories/:id` (staff) → 204 no content
+- `GET /api/v1/aulas` → lista aulas `{ data: [ ... ] }`
+- `GET /api/v1/aulas/:id` → mostra aula `{ data: { ... } }`
+- `POST /api/v1/aulas` (staff) → cria `{ data: { ... } }`
+- `POST /api/v1/aulas/:id/enroll` (aluno) → matricula `{ data: { message, id } }`
+
+Perfis:
+- `admin`/`professor` podem criar/atualizar/excluir categorias e criar aulas.
+- `aluno` pode listar/ver categorias/aulas e se matricular em aulas.
+
+### Postman
+
+Coleção pronta em `postman/fit_dreams_api.postman_collection.json` com variáveis `baseUrl`, `email`, `password` e `token`.
+Fluxo sugerido:
+1) Rodar "Auth: Login" → salva `token` automaticamente nas variáveis da coleção.
+2) Usar `GET /api/v1/me` para validar o token.
+3) Exercitar rotas de `Categories` e `Aulas` (respeitando o papel do usuário logado).
+
+### Testes e qualidade
+
+Dentro de `fit_dreams_api/`:
+
+```bash
+bundle exec rspec --format documentation
+bundle exec rubocop
+```
+
 ## 12) Próximos passos
 
-- Implementar políticas Pundit e testes
-- Adicionar serializers
-- Publicar coleção Postman em `postman/`
-- Escrever seeds para usuários (admin/teacher/student) e categorias/aulas
+- Iniciar Fase 5 (a combinar): possivelmente serializers/dry-types/paginação/ordenar/filtros, observabilidade, e2e, etc.

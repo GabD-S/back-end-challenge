@@ -1,0 +1,170 @@
+{
+  "info": {
+    "name": "Fit Dreams API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_postman_id": "a7e6b1b0-0000-4000-a000-000000000001"
+  },
+  "item": [
+    {
+      "name": "Auth: Login",
+      "request": {
+        "method": "POST",
+        "header": [
+          {"key": "Content-Type", "value": "application/json"}
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/login",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v1", "login"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"{{email}}\",\n  \"password\": \"{{password}}\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const res = pm.response.json();",
+              "if (res && res.data && res.data.token) {",
+              "  pm.collectionVariables.set('token', res.data.token);",
+              "  pm.collectionVariables.set('user_email', res.data.user.email);",
+              "}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Auth: Me",
+      "request": {
+        "method": "GET",
+        "header": [
+          {"key": "Authorization", "value": "Bearer {{token}}"}
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/me",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v1", "me"]
+        }
+      }
+    },
+    {
+      "name": "Categories",
+      "item": [
+        {
+          "name": "List categories",
+          "request": {
+            "method": "GET",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{token}}"}
+            ],
+            "url": {"raw": "{{baseUrl}}/api/v1/categories", "host": ["{{baseUrl}}"], "path": ["api", "v1", "categories"]}
+          }
+        },
+        {
+          "name": "Show category",
+          "request": {
+            "method": "GET",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{token}}"}
+            ],
+            "url": {"raw": "{{baseUrl}}/api/v1/categories/{{category_id}}", "host": ["{{baseUrl}}"], "path": ["api", "v1", "categories", "{{category_id}}"]}
+          }
+        },
+        {
+          "name": "Create category (staff)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{token}}"},
+              {"key": "Content-Type", "value": "application/json"}
+            ],
+            "url": {"raw": "{{baseUrl}}/api/v1/categories", "host": ["{{baseUrl}}"], "path": ["api", "v1", "categories"]},
+            "body": {"mode": "raw", "raw": "{\n  \"category\": {\n    \"name\": \"Cardio\",\n    \"description\": \"Aerobic exercises\"\n  }\n}"}
+          }
+        },
+        {
+          "name": "Update category (staff)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{token}}"},
+              {"key": "Content-Type", "value": "application/json"}
+            ],
+            "url": {"raw": "{{baseUrl}}/api/v1/categories/{{category_id}}", "host": ["{{baseUrl}}"], "path": ["api", "v1", "categories", "{{category_id}}"]},
+            "body": {"mode": "raw", "raw": "{\n  \"category\": {\n    \"name\": \"Updated Name\"\n  }\n}"}
+          }
+        },
+        {
+          "name": "Delete category (staff)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{token}}"}
+            ],
+            "url": {"raw": "{{baseUrl}}/api/v1/categories/{{category_id}}", "host": ["{{baseUrl}}"], "path": ["api", "v1", "categories", "{{category_id}}"]}
+          }
+        }
+      ]
+    },
+    {
+      "name": "Aulas",
+      "item": [
+        {
+          "name": "List aulas",
+          "request": {
+            "method": "GET",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{token}}"}
+            ],
+            "url": {"raw": "{{baseUrl}}/api/v1/aulas", "host": ["{{baseUrl}}"], "path": ["api", "v1", "aulas"]}
+          }
+        },
+        {
+          "name": "Show aula",
+          "request": {
+            "method": "GET",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{token}}"}
+            ],
+            "url": {"raw": "{{baseUrl}}/api/v1/aulas/{{aula_id}}", "host": ["{{baseUrl}}"], "path": ["api", "v1", "aulas", "{{aula_id}}"]}
+          }
+        },
+        {
+          "name": "Create aula (staff)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{token}}"},
+              {"key": "Content-Type", "value": "application/json"}
+            ],
+            "url": {"raw": "{{baseUrl}}/api/v1/aulas", "host": ["{{baseUrl}}"], "path": ["api", "v1", "aulas"]},
+            "body": {"mode": "raw", "raw": "{\n  \"aula\": {\n    \"name\": \"Pilates\",\n    \"start_time\": \"2030-01-01T10:00:00Z\",\n    \"duration\": 60,\n    \"teacher_name\": \"Maria\",\n    \"category_id\": {{category_id}}\n  }\n}"}
+          }
+        },
+        {
+          "name": "Enroll (aluno)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{token}}"}
+            ],
+            "url": {"raw": "{{baseUrl}}/api/v1/aulas/{{aula_id}}/enroll", "host": ["{{baseUrl}}"], "path": ["api", "v1", "aulas", "{{aula_id}}", "enroll"]}
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {"key": "baseUrl", "value": "http://localhost:3000"},
+    {"key": "email", "value": "admin@example.com"},
+    {"key": "password", "value": "Password!23"},
+    {"key": "token", "value": ""},
+    {"key": "category_id", "value": "1"},
+    {"key": "aula_id", "value": "1"}
+  ]
+}
