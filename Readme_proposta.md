@@ -230,13 +230,13 @@ Observações desta etapa (o que já foi feito):
     - Incluir paginação nos endpoints de listagem (categories e aulas) e filtros nas aulas (por `category_id` e `start_time`). Sugerido incluir `meta.pagination` no payload.
 
 - Segurança e configuração
-    - Configurar CORS via `rack-cors`, controlado pela variável de ambiente `ALLOWED_ORIGINS`.
-    - Considerar rate limiting com `rack-attack` (limites básicos por IP).
+    - [x] Configurar CORS via `rack-cors`, controlado pela variável de ambiente `ALLOWED_ORIGINS`.
+    - [x] Adicionar rate limiting com `rack-attack` (limites básicos por IP e reforço para login/signup).
     - Garantir `lib/` em autoload/eager-load em produção (uso de `JsonWebToken`).
     - Validar variáveis obrigatórias: `SECRET_KEY_BASE` ou `RAILS_MASTER_KEY`, `DATABASE_URL`; opcionais: `JWT_EXP`, `ALLOWED_ORIGINS`.
 
 - Operação e dados
-    - Adicionar tarefa Rake idempotente de bootstrap (criação de usuários `admin`, `professor`, `aluno` e categorias iniciais).
+    - [x] Adicionar tarefa Rake idempotente de bootstrap (criação de usuários `admin`, `professor`, `aluno` e categorias iniciais).
     - Conferir índices/constraints no banco em produção: índice único em `LOWER(email)` e índice único composto em `enrollments(user_id,aula_id)`; garantir aplicações de migrations.
 
 - Documentação e ferramentas
@@ -244,8 +244,16 @@ Observações desta etapa (o que já foi feito):
     - Atualizar a coleção Postman/Insomnia com `baseUrl`, `token` e requisições de `signup`, `login`, `me`, `categories` CRUD e `aulas` CRUD + `enroll`, com observações por perfil.
 
 - Execução em produção
-    - Adicionar `Procfile` (`web: bundle exec puma -C config/puma.rb`) e validar `config/puma.rb`.
+    - [x] Adicionar `Procfile` (`web: bundle exec puma -C config/puma.rb`) e validar `config/puma.rb`.
     - Definir variáveis de ambiente, executar `db:migrate` e (opcional) tarefa de bootstrap; validar saúde via `/api/v1/me` e fluxo de `login`.
+
+#### Variáveis de ambiente relevantes
+
+- `ALLOWED_ORIGINS` (CORS): lista separada por vírgula das origens permitidas (ex.: `https://app.exemplo.com,https://admin.exemplo.com`). Padrão: `*`.
+- `RACK_ATTACK_REQ_LIMIT_PER_MIN` (rate limit geral): padrão `60` req/min por IP.
+- `RACK_ATTACK_LOGIN_LIMIT` (rate limit login): padrão `5` req/20s por IP.
+- `RACK_ATTACK_SIGNUP_LIMIT` (rate limit signup): padrão `5` req/min por IP.
+- `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `PROFESSOR_EMAIL`, `PROFESSOR_PASSWORD`, `ALUNO_EMAIL`, `ALUNO_PASSWORD` (bootstrap): credenciais usadas pela tarefa `rails bootstrap:setup`.
 
 - [ ] Criar uma nova aplicação no Heroku.
 - [ ] Garantir que a gem `pg` está no grupo principal do `Gemfile`.
