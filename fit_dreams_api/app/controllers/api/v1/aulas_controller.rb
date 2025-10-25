@@ -5,8 +5,41 @@ module Api
       before_action :set_aula, only: [ :show, :enroll, :update, :destroy ]
 
       def index
-        aulas = policy_scope(Aula)
-        render_success(aulas)
+        scope = policy_scope(Aula)
+        # Filters
+        if params[:category_id].present?
+          scope = scope.where(category_id: params[:category_id])
+        end
+        if params[:start_time_from].present?
+          begin
+            from = Time.parse(params[:start_time_from])
+            scope = scope.where("start_time >= ?", from)
+          rescue ArgumentError
+            # ignore invalid date filter
+          end
+        end
+        if params[:start_time_to].present?
+          begin
+            to = Time.parse(params[:start_time_to])
+            scope = scope.where("start_time <= ?", to)
+          rescue ArgumentError
+            # ignore invalid date filter
+          end
+        end
+
+        # Pagination
+        page = params.fetch(:page, 1).to_i
+        per_page = [[params.fetch(:per_page, 20).to_i, 100].min, 1].max
+        total = scope.count
+        total_pages = (total / per_page.to_f).ceil
+        records = scope.offset((page - 1) * per_page).limit(per_page)
+
+        render json: {
+          data: records,
+          meta: {
+            pagination: { page: page, per_page: per_page, total: total, total_pages: total_pages }
+          }
+        }, status: :ok
       end
 
       def show
