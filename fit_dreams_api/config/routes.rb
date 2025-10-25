@@ -14,7 +14,7 @@ Rails.application.routes.draw do
       post "signup", to: "users#create"
       get "me", to: "users#me"
       resources :categories, only: [ :index, :show, :create, :update, :destroy ]
-      resources :aulas, only: [ :index, :show, :create ] do
+      resources :aulas, only: [ :index, :show, :create, :update, :destroy ] do
         member do
           post :enroll
         end

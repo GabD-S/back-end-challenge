@@ -11,6 +11,14 @@ class AulaPolicy < ApplicationPolicy
     staff?
   end
 
+  def update?
+    staff?
+  end
+
+  def destroy?
+    staff?
+  end
+
   def enroll?
     user&.aluno?
   end

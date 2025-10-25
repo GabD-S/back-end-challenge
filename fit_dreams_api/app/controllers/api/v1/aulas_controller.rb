@@ -2,7 +2,7 @@ module Api
   module V1
     class AulasController < ApplicationController
       before_action :authenticate_request!
-      before_action :set_aula, only: [ :show, :enroll ]
+      before_action :set_aula, only: [ :show, :enroll, :update, :destroy ]
 
       def index
         aulas = policy_scope(Aula)
@@ -32,6 +32,21 @@ module Api
         else
           render_errors(enrollment.errors.full_messages, status: :unprocessable_entity)
         end
+      end
+
+      def update
+        authorize @aula
+        if @aula.update(aula_params)
+          render_success(@aula)
+        else
+          render_errors(@aula.errors.full_messages, status: :unprocessable_entity)
+        end
+      end
+
+      def destroy
+        authorize @aula
+        @aula.destroy
+        head :no_content
       end
 
       private

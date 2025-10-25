@@ -207,15 +207,19 @@ Observações desta etapa (o que já foi feito):
 - Coleção Postman adicionada em `postman/fit_dreams_api.postman_collection.json` com exemplos prontos de login, me, categories e aulas (inclui variável `token` populada automaticamente ao logar).
 
 ### Fase 5: API Endpoints (Controllers e Rotas)
- [x] Estruturar as rotas dentro de um `namespace :api, :v1`.
- [x] Criar `UsersController` para a ação `create` (signup) com retorno `{ data: { token, exp, user } }` e status 201.
- [x] Adicionar rota `POST /api/v1/signup`.
-- [ ] (Diferencial) Escrever testes de requisição (request specs) com RSpec para os principais endpoints, cobrindo:
- [ ] (Diferencial) Escrever testes de requisição (request specs) com RSpec para os principais endpoints, cobrindo:
-     - [x] Casos de sucesso (status 200, 201) para login, me e signup.
+ - [x] Estruturar as rotas dentro de um `namespace :api, :v1`.
+ - [x] Criar `UsersController` para a ação `create` (signup) com retorno `{ data: { token, exp, user } }` e status 201.
+ - [x] Adicionar rota `POST /api/v1/signup`.
+ - [x] Completar `AulasController` com `update` e `destroy` (staff via Pundit) e respostas padronizadas.
+ - [x] Atualizar rotas de `aulas` para incluir `update` e `destroy`.
+
+### Fase 6: Testes e Documentação
+ - [ ] (Diferencial) Escrever testes de requisição (request specs) com RSpec para os principais endpoints, cobrindo:
+     - [x] Casos de sucesso (status 200, 201) para login, me, signup, aulas update e destroy.
      - [x] Erros de autenticação (status 401) para rotas protegidas.
-     - [x] Erros de validação (status 422) em signup e criação/atualização de recursos.
- [x] Criar uma coleção no Postman para documentar e testar a API manualmente (arquivo `postman/fit_dreams_api.postman_collection.json`).
+     - [x] Erros de autorização (status 403) para aluno em ações restritas (ex.: aulas update/destroy).
+     - [x] Erros de validação (status 422) em signup e atualização de recursos.
+ - [x] Criar uma coleção no Postman para documentar e testar a API manualmente (arquivo `postman/fit_dreams_api.postman_collection.json`).
 
 ### Fase 7: Deploy
 - [ ] Criar uma nova aplicação no Heroku.
