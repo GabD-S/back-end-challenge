@@ -222,6 +222,31 @@ Observações desta etapa (o que já foi feito):
  - [x] Criar uma coleção no Postman para documentar e testar a API manualmente (arquivo `postman/fit_dreams_api.postman_collection.json`).
 
 ### Fase 7: Deploy
+ 
+### Fase 6.5: Preparação para Deploy (pendências)
+
+- Padrão de respostas e recursos de listagem
+    - Confirmar o uso consistente do formato `{ data }` e `{ errors }` em todos os endpoints.
+    - Incluir paginação nos endpoints de listagem (categories e aulas) e filtros nas aulas (por `category_id` e `start_time`). Sugerido incluir `meta.pagination` no payload.
+
+- Segurança e configuração
+    - Configurar CORS via `rack-cors`, controlado pela variável de ambiente `ALLOWED_ORIGINS`.
+    - Considerar rate limiting com `rack-attack` (limites básicos por IP).
+    - Garantir `lib/` em autoload/eager-load em produção (uso de `JsonWebToken`).
+    - Validar variáveis obrigatórias: `SECRET_KEY_BASE` ou `RAILS_MASTER_KEY`, `DATABASE_URL`; opcionais: `JWT_EXP`, `ALLOWED_ORIGINS`.
+
+- Operação e dados
+    - Adicionar tarefa Rake idempotente de bootstrap (criação de usuários `admin`, `professor`, `aluno` e categorias iniciais).
+    - Conferir índices/constraints no banco em produção: índice único em `LOWER(email)` e índice único composto em `enrollments(user_id,aula_id)`; garantir aplicações de migrations.
+
+- Documentação e ferramentas
+    - Atualizar este documento com: endpoints finais (incluindo `aulas` update/destroy), exemplos `curl` por perfil com header `Authorization`, tabela de variáveis de ambiente e passos de deploy; inserir a URL final do deploy.
+    - Atualizar a coleção Postman/Insomnia com `baseUrl`, `token` e requisições de `signup`, `login`, `me`, `categories` CRUD e `aulas` CRUD + `enroll`, com observações por perfil.
+
+- Execução em produção
+    - Adicionar `Procfile` (`web: bundle exec puma -C config/puma.rb`) e validar `config/puma.rb`.
+    - Definir variáveis de ambiente, executar `db:migrate` e (opcional) tarefa de bootstrap; validar saúde via `/api/v1/me` e fluxo de `login`.
+
 - [ ] Criar uma nova aplicação no Heroku.
 - [ ] Garantir que a gem `pg` está no grupo principal do `Gemfile`.
 - [ ] Fazer o deploy da branch `main` para o Heroku (`git push heroku main`).
