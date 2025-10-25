@@ -207,19 +207,15 @@ Observações desta etapa (o que já foi feito):
 - Coleção Postman adicionada em `postman/fit_dreams_api.postman_collection.json` com exemplos prontos de login, me, categories e aulas (inclui variável `token` populada automaticamente ao logar).
 
 ### Fase 5: API Endpoints (Controllers e Rotas)
-- [ ] Estruturar as rotas dentro de um `namespace :api, :v1`.
-- [ ] Criar `UsersController` para a ação `create` (signup).
-- [ ] Criar `CategoriesController` com as ações CRUD, protegidas pelo Pundit.
-- [ ] Criar `AulasController` com as ações CRUD, protegidas pelo Pundit.
-- [ ] Adicionar uma rota e ação para permitir que alunos se matriculem (`POST /aulas/:id/enroll`).
-
-### Fase 6: Testes e Documentação
+ [x] Estruturar as rotas dentro de um `namespace :api, :v1`.
+ [x] Criar `UsersController` para a ação `create` (signup) com retorno `{ data: { token, exp, user } }` e status 201.
+ [x] Adicionar rota `POST /api/v1/signup`.
 - [ ] (Diferencial) Escrever testes de requisição (request specs) com RSpec para os principais endpoints, cobrindo:
-    - [ ] Casos de sucesso (status 200, 201).
-    - [ ] Erros de autenticação (status 401).
-    - [ ] Erros de autorização (status 403).
-    - [ ] Erros de validação (status 422).
-- [ ] Criar uma coleção no Postman ou Insomnia para documentar e testar a API manualmente.
+ [ ] (Diferencial) Escrever testes de requisição (request specs) com RSpec para os principais endpoints, cobrindo:
+     - [x] Casos de sucesso (status 200, 201) para login, me e signup.
+     - [x] Erros de autenticação (status 401) para rotas protegidas.
+     - [x] Erros de validação (status 422) em signup e criação/atualização de recursos.
+ [x] Criar uma coleção no Postman para documentar e testar a API manualmente (arquivo `postman/fit_dreams_api.postman_collection.json`).
 
 ### Fase 7: Deploy
 - [ ] Criar uma nova aplicação no Heroku.
