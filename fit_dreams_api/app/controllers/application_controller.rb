@@ -12,9 +12,15 @@ class ApplicationController < ActionController::API
   # Before-action to protect endpoints
   def authenticate_request!
     token = bearer_token
+    return render_unauthorized unless token.present?
+
     payload = JsonWebToken.decode(token)
-    @current_user = User.find(payload["user_id"]) if payload["user_id"]
-  rescue StandardError
+    user_id = payload["user_id"]
+    return render_unauthorized unless user_id
+
+    @current_user = User.find_by(id: user_id)
+    return render_unauthorized unless @current_user
+  rescue JWT::DecodeError, JWT::ExpiredSignature
     render_unauthorized
   end
 
