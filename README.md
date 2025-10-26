@@ -1,24 +1,8 @@
-# README
+# Fit Dreams API
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Este é o repositório do backend (Rails API) do desafio Switch Dreams.
 
-Things you may want to cover:
+- Guia completo de uso, endpoints, testes e deploy: veja `Readme_proposta.md`.
+- Produção (Heroku): https://backend-challange-49e1fdfd811c.herokuapp.com
 
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Se quiser, posso consolidar tudo em um único `README.md` no final.

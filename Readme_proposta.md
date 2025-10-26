@@ -262,3 +262,102 @@ Observações desta etapa (o que já fiz):
 - [ ] Vou executar as migrations no ambiente de produção (`heroku run rails db:migrate`).
 - [ ] Vou testar os endpoints da API em produção.
 - [ ] Vou atualizar este `README.md` com a URL final da API.
+
+---
+
+## 🌍 Como usar a API no Heroku (produção)
+
+Base da API (produção): https://backend-challange-49e1fdfd811c.herokuapp.com
+
+- Sem banco configurado no Heroku, apenas verificações simples funcionam (ex.: rotas protegidas retornam 401). Para usar login/signup/CRUD é necessário configurar um Postgres e rodar as migrations.
+
+### 1) Teste rápido sem banco (só para validar o servidor)
+
+- Verificar que o app está de pé (deve retornar 404):
+    - GET https://backend-challange-49e1fdfd811c.herokuapp.com/
+- Rota protegida sem token (retorna 401):
+    - GET https://backend-challange-49e1fdfd811c.herokuapp.com/api/v1/me
+
+### 2) Habilitar banco de dados (opções)
+
+- Opção A: usar Postgres externo gratuito (ex.: Neon, ElephantSQL)
+    - Criar uma database e obter a URL de conexão (ex.: `postgres://USER:PASSWORD@HOST:PORT/DBNAME`).
+    - Definir no Heroku: `DATABASE_URL` com essa URL.
+    - Rodar migrations e (opcional) bootstrap.
+
+- Opção B: usar Postgres do Heroku (pago)
+    - Provisionar o add-on Postgres.
+    - Heroku define `DATABASE_URL` automaticamente.
+    - Rodar migrations e (opcional) bootstrap.
+
+Exemplos de comandos (via Heroku CLI):
+
+```bash
+# Definir variável de ambiente (se usar DB externo)
+heroku config:set DATABASE_URL="postgres://USER:PASSWORD@HOST:PORT/DBNAME" -a backend-challange-49e1fdfd811c
+
+# (Opcional) CORS
+heroku config:set ALLOWED_ORIGINS="*" -a backend-challange-49e1fdfd811c
+
+# Rodar migrations
+heroku run rails db:migrate -a backend-challange-49e1fdfd811c
+
+# (Opcional) Popular usuários/categorias de exemplo
+heroku run rails bootstrap:setup -a backend-challange-49e1fdfd811c
+```
+
+Bootstrap cria usuários padrão (pode personalizar via env):
+- admin: `admin@example.com` / `Password!23`
+- professor: `prof@example.com` / `Password!23`
+- aluno: `aluno@example.com` / `Password!23`
+
+### 3) Autenticação e chamadas na produção
+
+1. Login (recebo `token`):
+
+```bash
+curl -s -X POST \
+    https://backend-challange-49e1fdfd811c.herokuapp.com/api/v1/login \
+    -H 'Content-Type: application/json' \
+    -d '{"email":"admin@example.com","password":"Password!23"}'
+```
+
+2. Uso o token no header `Authorization` (Bearer):
+
+```bash
+TOKEN="<cole-o-token-aqui>"
+
+# Meu usuário logado
+curl -s https://backend-challange-49e1fdfd811c.herokuapp.com/api/v1/me \
+    -H "Authorization: Bearer $TOKEN"
+
+# Listar categorias
+curl -s https://backend-challange-49e1fdfd811c.herokuapp.com/api/v1/categories \
+    -H "Authorization: Bearer $TOKEN"
+```
+
+3. Exemplo (professor/admin) criar categoria:
+
+```bash
+curl -s -X POST \
+    https://backend-challange-49e1fdfd811c.herokuapp.com/api/v1/categories \
+    -H 'Content-Type: application/json' \
+    -H "Authorization: Bearer $TOKEN" \
+    -d '{"category": {"name":"Cardio","description":"Aulas de alta intensidade"}}'
+```
+
+4. Exemplo filtros/paginação (aulas):
+
+```bash
+curl -s "https://backend-challange-49e1fdfd811c.herokuapp.com/api/v1/aulas?page=1&per_page=10" \
+    -H "Authorization: Bearer $TOKEN"
+```
+
+Observações:
+- As respostas seguem o padrão `{ data: ... }` em sucesso e `{ errors: [...] }` em erro.
+- Para front-ends, configure `ALLOWED_ORIGINS` conforme os domínios da aplicação para liberar CORS.
+- `SECRET_KEY_BASE` deve estar definido (o Heroku já costuma gerenciar isso quando uso credenciais/keys); se necessário, seto manualmente via `heroku config:set`.
+
+### 4) Postman/Insomnia (opcional)
+
+- Posso incluir uma nova coleção Postman na raiz do projeto com os endpoints (signup, login, me, categories, aulas, enroll) pronta para uso com variável `baseUrl` e `token`. Se você preferir Insomnia, posso incluir também.
