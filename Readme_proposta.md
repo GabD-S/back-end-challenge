@@ -4,7 +4,7 @@ Este repositório contém a solução para o desafio de backend da **Switch Drea
 
 A aplicação foi desenvolvida utilizando Ruby on Rails no modo API, com foco em boas práticas, código limpo e organização.
 
-**URL da API (Deploy):** `[AINDA A SER INSERIDO - LINK DO HEROKU AQUI]`
+**URL da API (Deploy):** https://backend-challange-49e1fdfd811c.herokuapp.com
 
 ---
 
@@ -255,9 +255,9 @@ Observações desta etapa (o que já foi feito):
 - `RACK_ATTACK_SIGNUP_LIMIT` (rate limit signup): padrão `5` req/min por IP.
 - `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `PROFESSOR_EMAIL`, `PROFESSOR_PASSWORD`, `ALUNO_EMAIL`, `ALUNO_PASSWORD` (bootstrap): credenciais usadas pela tarefa `rails bootstrap:setup`.
 
-- [ ] Criar uma nova aplicação no Heroku.
+- [x] Criar uma nova aplicação no Heroku.
 - [ ] Garantir que a gem `pg` está no grupo principal do `Gemfile`.
-- [ ] Fazer o deploy da branch `main` para o Heroku (`git push heroku main`).
+- [x] Fazer o deploy da branch `main` para o Heroku (`git push heroku main`).
 - [ ] Executar as migrations no ambiente de produção (`heroku run rails db:migrate`).
 - [ ] Testar os endpoints da API em produção.
 - [ ] Atualizar este `README.md` com a URL final da API.
