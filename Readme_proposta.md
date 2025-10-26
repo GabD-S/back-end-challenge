@@ -247,6 +247,8 @@ Observações desta etapa (o que já foi feito):
     - [x] Adicionar `Procfile` (`web: bundle exec puma -C config/puma.rb`) e validar `config/puma.rb`.
     - Definir variáveis de ambiente, executar `db:migrate` e (opcional) tarefa de bootstrap; validar saúde via `/api/v1/me` e fluxo de `login`.
 
+> Observação Heroku/DB: No momento, não provisionamos banco de dados no Heroku, pois não há camada gratuita do Postgres. Para prosseguir com endpoints que dependem de banco (signup/login/CRUDs) seria necessário um plano pago — o que não nos interessa agora. Para testes possíveis sem banco e detalhes do ambiente de produção, consulte `docs/heroku_testes.md`.
+
 #### Variáveis de ambiente relevantes
 
 - `ALLOWED_ORIGINS` (CORS): lista separada por vírgula das origens permitidas (ex.: `https://app.exemplo.com,https://admin.exemplo.com`). Padrão: `*`.
