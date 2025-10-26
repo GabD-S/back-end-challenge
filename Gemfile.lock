@@ -292,5 +292,8 @@ DEPENDENCIES
   rubocop-rails-omakase
   tzinfo-data
 
+RUBY VERSION
+   ruby 3.2.3p157
+
 BUNDLED WITH
    2.4.19
