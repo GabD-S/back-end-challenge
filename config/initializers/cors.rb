@@ -6,13 +6,13 @@
 # Read more: https://github.com/cyu/rack-cors
 
 if defined?(Rack::Cors)
-	Rails.application.config.middleware.insert_before 0, Rack::Cors do
-		allow do
-			origins ENV.fetch("ALLOWED_ORIGINS", "*")
+  Rails.application.config.middleware.insert_before 0, Rack::Cors do
+    allow do
+      origins ENV.fetch("ALLOWED_ORIGINS", "*")
 
-			resource "*",
-							 headers: :any,
-							 methods: %i[get post put patch delete options head]
-		end
-	end
+      resource "*",
+               headers: :any,
+               methods: %i[get post put patch delete options head]
+    end
+  end
 end

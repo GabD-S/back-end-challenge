@@ -7,7 +7,7 @@ module Api
       def index
         categories = policy_scope(Category)
         page = params.fetch(:page, 1).to_i
-        per_page = [[params.fetch(:per_page, 20).to_i, 100].min, 1].max
+        per_page = [ [ params.fetch(:per_page, 20).to_i, 100 ].min, 1 ].max
         total = categories.count
         total_pages = (total / per_page.to_f).ceil
         records = categories.offset((page - 1) * per_page).limit(per_page)

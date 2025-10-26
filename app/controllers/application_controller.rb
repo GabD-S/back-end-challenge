@@ -19,7 +19,7 @@ class ApplicationController < ActionController::API
     return render_unauthorized unless user_id
 
     @current_user = User.find_by(id: user_id)
-    return render_unauthorized unless @current_user
+    render_unauthorized unless @current_user
   rescue JWT::DecodeError, JWT::ExpiredSignature
     render_unauthorized
   end
