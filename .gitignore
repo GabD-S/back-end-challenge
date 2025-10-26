@@ -3,7 +3,7 @@
 # Bundler / gems
 /vendor/bundle/
 /.bundle/
-Gemfile.lock
+# Keep Gemfile.lock committed for apps (Heroku/build reproducibility)
 
 # Logs and temp files
 /log/*
