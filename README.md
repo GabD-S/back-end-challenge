@@ -4,7 +4,7 @@ Este projeto é uma API RESTful em Ruby on Rails (API-only) para gerenciar aulas
 
 - Guia detalhado (mais completo): veja `Readme_proposta.md`.
 - Produção (Heroku): https://backend-challange-49e1fdfd811c.herokuapp.com
-
+- Desenvolvimento de talhado(Github):  https://github.com/GabD-S/back-end-challenge
 ## O que a API retorna (contrato de respostas)
 
 - Respostas de sucesso seguem o padrão:
@@ -33,7 +33,7 @@ Perfis e permissões:
 - Respostas padronizadas: `{ data }` e `{ errors }` simplificam o consumo no front.
 - Paginação e filtros: performance e UX em listagens grandes.
 - CORS configurável (ALLOWED_ORIGINS) e rate limiting (rack-attack): segurança básica pronta para produção.
-- Heroku: deploy simples. Observação: não há Postgres gratuito; portanto, em produção o app só funcionará plenamente se você configurar um banco (DATABASE_URL externo ou add-on pago) e rodar as migrations. Sem DB, endpoints protegidos respondem 401 (ok), mas signup/login/CRUD que gravam no banco irão falhar.
+- Heroku: deploy simples. Observação: não há Postgres gratuito; portanto, em produção o app só funcionará plenamente configurar um banco (DATABASE_URL externo ou add-on pago) e rodar as migrations. Sem DB, endpoints protegidos respondem 401 (ok), mas signup/login/CRUD que gravam no banco irão falhar.
 
 ## Como rodar localmente (passo a passo)
 
