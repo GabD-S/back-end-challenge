@@ -36,7 +36,7 @@ group :development, :test do
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
 
   # Pinned to latest patch to satisfy CI scanner (exit code 5 when outdated)
-  gem "brakeman", "= 7.1.1", require: false
+  gem "brakeman", "7.1.1", require: false
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
