@@ -2,7 +2,7 @@
 
 Este projeto é uma API RESTful em Ruby on Rails (API-only) para gerenciar aulas da academia Fit Dreams, com autenticação via JWT, autorização por perfis (aluno, professor, admin), respostas JSON padronizadas e boas práticas de segurança (CORS e rate limiting).
 
-- Guia detalhado (mais completo): veja `Readme_proposta.md`.
+- Guia detalhado (mais completo): veja `Planejamento.md`.
 - Produção (Heroku): https://backend-challange-49e1fdfd811c.herokuapp.com
 - Desenvolvimento de talhado(Github):  https://github.com/GabD-S/back-end-challenge
 ## O que a API retorna (contrato de respostas)
@@ -37,10 +37,53 @@ Perfis e permissões:
 
 ## Como rodar localmente (passo a passo)
 
+# Fit Dreams API (Switch Dreams Challenge)
+
+Este projeto é uma API RESTful em Ruby on Rails (API-only) para gerenciar aulas da academia Fit Dreams, com autenticação via JWT, autorização por perfis (aluno, professor, admin), respostas JSON padronizadas e boas práticas de segurança (CORS e rate limiting).
+
+**URL da API (Deploy):** https://backend-challange-49e1fdfd811c.herokuapp.com
+**Dashboard Heroku:** https://dashboard.heroku.com/apps/backend-challange
+
+**Nota:** Não é possível acessar o banco de dados diretamente pelo Heroku, pois não foi provisionado Postgres (camada gratuita indisponível). Endpoints que dependem de banco (signup/login/CRUD) não funcionam em produção até configurar um banco externo ou add-on pago.
+
+## O que a API retorna (contrato de respostas)
+
+Todas as respostas seguem o padrão:
+- Sucesso: `{ "data": <payload> }`
+- Erro: `{ "errors": ["mensagem 1", "mensagem 2", ...] }`
+
+Exemplos:
+- Login (POST /api/v1/login):
+	- Sucesso: `{ "data": { "token": "...", "exp": 1730000000, "user": { "id": 1, "name": "...", "email": "...", "role": "admin" } } }`
+	- Erro (401): `{ "errors": ["Invalid email or password"] }`
+- Me (GET /api/v1/me):
+	- Sem token: 401 com `{ "errors": ["Unauthorized"] }`
+	- Com token válido: `{ "data": { "id": 1, "name": "...", "email": "...", "role": "admin" } }`
+- Categorias/Aulas: listagens com paginação retornam `{ data: [...], meta: { pagination: { page, per_page, total, total_pages } } }`
+
+Perfis e permissões:
+- aluno: pode ver categorias/aulas e se matricular.
+- professor/admin: podem criar/atualizar/deletar categorias e aulas.
+
+## Planejamento e execução do projeto
+
+O projeto foi planejado e executado em etapas:
+
+- Configuração do ambiente Rails 7 API-only com PostgreSQL.
+- Modelagem dos dados e migrations para User, Category, Aula, Enrollment.
+- Implementação de autenticação JWT e autorização por perfil (Pundit).
+- Padronização das respostas JSON, paginação, filtros e testes automatizados (RSpec).
+- Configuração de CORS, rate limiting, bootstrap de dados e deploy no Heroku.
+- Documentação dos endpoints, exemplos de uso e instruções de deploy.
+
+Todas as tarefas do planejamento foram concluídas.
+
+## Como rodar localmente (passo a passo)
+
 Pré-requisitos:
-- Ruby 3.2.3 (o projeto fixa esta versão no Gemfile)
+- Ruby 3.2.3
 - Bundler
-- PostgreSQL instalado e rodando
+- PostgreSQL rodando
 
 1) Clonar o repositório
 ```bash
@@ -56,15 +99,13 @@ bundle install
 
 3) Configurar banco de dados
 - O arquivo `config/database.yml` já aponta para os bancos locais `fit_dreams_api_development` e `fit_dreams_api_test`.
-- Se necessário, ajuste usuário/senha/host do Postgres nesse arquivo.
+- Ajuste usuário/senha/host do Postgres se necessário.
 
 4) Criar e migrar o banco
 ```bash
 bundle exec rails db:prepare
-# opcional: popular dados de exemplo com seeds
-bundle exec rails db:seed
-# opcional: tarefa bootstrap com usuários (admin/professor/aluno) e categorias
-bundle exec rails bootstrap:setup
+bundle exec rails db:seed          # opcional
+bundle exec rails bootstrap:setup  # opcional (cria admin/professor/aluno + categorias)
 ```
 
 5) Subir o servidor
@@ -73,12 +114,12 @@ bundle exec rails s
 ```
 - A API ficará em http://localhost:3000
 
-6) Testes automatizados (opcional, recomendado)
+6) Testes automatizados
 ```bash
 bundle exec rspec
 ```
 
-7) Chamadas de exemplo (curl)
+7) Exemplos de chamadas (curl)
 - Signup:
 ```bash
 curl -s -X POST http://localhost:3000/api/v1/signup \
@@ -102,8 +143,7 @@ curl -s http://localhost:3000/api/v1/me -H "Authorization: Bearer $TOKEN"
 ## Produção (Heroku)
 
 - Base: https://backend-challange-49e1fdfd811c.herokuapp.com
-- Sem banco configurado no Heroku, apenas validações simples funcionam (ex.: 401 em rotas protegidas). Para usar login/signup/CRUD, configure `DATABASE_URL` (Postgres externo ou add-on) e rode:
-	- `heroku run rails db:migrate -a backend-challange-49e1fdfd811c`
-	- `heroku run rails bootstrap:setup -a backend-challange-49e1fdfd811c` (opcional)
+- Dashboard: https://dashboard.heroku.com/apps/backend-challange
+- **Nota:** Não é possível acessar o banco de dados diretamente pelo Heroku, pois não foi provisionado Postgres (camada gratuita indisponível). Endpoints que dependem de banco (signup/login/CRUD) não funcionam em produção até configurar um banco externo ou add-on pago.
 
-Para detalhes adicionais (variáveis de ambiente, exemplos completos, Postman/Insomnia), veja `Readme_proposta.md`.
+Para detalhes adicionais (variáveis de ambiente, exemplos completos, Postman/Insomnia), veja `Planejamento.md`.
